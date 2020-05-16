@@ -44,6 +44,7 @@ public class Simulator extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
@@ -83,6 +84,11 @@ public class Simulator extends javax.swing.JFrame {
         jLabel2.setText("ENTER A KEY:");
 
         jButton1.setText("Insert");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Search");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -93,8 +99,17 @@ public class Simulator extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("<html>Hash Function:<br/>h = k mod(10)<br/><br/>Global Depth: 2<br/><br/>Bfr: 3</html>");
         jLabel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jLabel3.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jLabel3FocusGained(evt);
+            }
+        });
+        jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel3MouseClicked(evt);
+            }
+        });
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -104,20 +119,34 @@ public class Simulator extends javax.swing.JFrame {
 
         jPanel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
+        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 442, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(32, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 418, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(57, Short.MAX_VALUE))
         );
 
         jScrollPane3.setViewportView(jPanel1);
 
         jButton3.setText("Clear");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -249,6 +278,288 @@ public class Simulator extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        
+        Input i = new Input();
+        
+        try {
+    			
+    			FileInputStream fi = new FileInputStream(new File("Inp.txt"));
+    			ObjectInputStream oi = new ObjectInputStream(fi);
+    			
+    			i = (Input) oi.readObject();
+    			
+    			oi.close();
+    			fi.close();
+    			
+    		}
+    		
+    		catch(Exception e) {
+    			
+    			//System.out.println(e.getStackTrace());
+    			e.printStackTrace();
+    			
+    		}
+                
+        Keys keys = new Keys();
+            
+            try {
+    			
+    			FileInputStream fi = new FileInputStream(new File("Keys.txt"));
+    			ObjectInputStream oi = new ObjectInputStream(fi);
+    			
+    			keys = (Keys) oi.readObject();
+    			
+    			oi.close();
+    			fi.close();
+    			
+    		}
+    		
+    		catch(Exception e) {
+    			
+    			//System.out.println(e.getStackTrace());
+    			e.printStackTrace();
+    			
+    		}
+            
+            /*Scanner in = new Scanner(System.in);
+            
+            String nextStep = in.nextLine();
+            
+            if(nextStep.equals("c")) {
+            	
+            	keys.clearKeysList();
+            	
+            }
+            
+            else {
+            	
+            	
+            	
+            }
+            
+            int input = in.nextInt();*/
+            
+            int input = Integer.parseInt(jTextField1.getText());
+            
+            keys.keyList.add(input);
+            
+            Directory d = new Directory(i.Bfr);
+            
+           /* try {
+    			
+    			FileInputStream fi = new FileInputStream(new File("Direc.txt"));
+    			ObjectInputStream oi = new ObjectInputStream(fi);
+    			
+    			d = (Directory) oi.readObject();
+    			
+    			oi.close();
+    			fi.close();
+    			
+    		}
+    		
+    		catch(Exception e) {
+    			
+    			//System.out.println(e.getStackTrace());
+    			e.printStackTrace();
+    			
+    		}*/
+            
+            System.out.println(input);
+            
+            //in.close();
+            
+            for(Integer inp : keys.keyList) {
+            
+            	d.insert(inp);
+            
+            	IntegerHasher h = IntegerHasher.getInstance();
+            
+            	int hashValue = h.hash(inp);
+            	String hashInBinary = String.format("%32s", 
+					Integer.toBinaryString(hashValue));
+			
+            	System.out.println(String.format("Hashed %s to: %s", inp, hashInBinary));
+            
+            	d.print();
+                
+                
+            	
+            }
+            
+            LabelString ls = new LabelString();
+            
+            try {
+    			
+    			FileInputStream fi = new FileInputStream(new File("LabelString.txt"));
+    			ObjectInputStream oi = new ObjectInputStream(fi);
+    			
+    			ls = (LabelString) oi.readObject();
+    			
+    			oi.close();
+    			fi.close();
+    			
+    		}
+    		
+    		catch(Exception e) {
+    			
+    			//System.out.println(e.getStackTrace());
+    			e.printStackTrace();
+    			
+    		}
+            
+            jLabel7.setText(ls.str);
+            
+            ls.str = "";
+            
+            try {
+    			
+    			FileOutputStream f = new FileOutputStream(new File("LabelString.txt"));
+    			ObjectOutputStream o = new ObjectOutputStream(f);
+    		
+    			o.writeObject(ls);
+    		
+    			o.close();
+    			f.close();
+    		
+    		}
+    	
+    		catch(Exception e) {
+    		
+    			//System.out.println(e.getStackTrace());
+    			e.printStackTrace();
+    		
+    		}
+            
+           /*try {
+    			
+    			FileOutputStream f = new FileOutputStream(new File("Direc.txt"));
+    			ObjectOutputStream o = new ObjectOutputStream(f);
+    		
+    			o.writeObject(d);
+    		
+    			o.close();
+    			f.close();
+    		
+    		}
+    	
+    		catch(Exception e) {
+    		
+    			//System.out.println(e.getStackTrace());
+    			e.printStackTrace();
+    		
+    		}*/
+            
+            try {
+    			
+    			FileOutputStream f = new FileOutputStream(new File("Keys.txt"));
+    			ObjectOutputStream o = new ObjectOutputStream(f);
+    		
+    			o.writeObject(keys);
+    		
+    			o.close();
+    			f.close();
+    		
+    		}
+    	
+    		catch(Exception e) {
+    		
+    			//System.out.println(e.getStackTrace());
+    			e.printStackTrace();
+    		
+    		}
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        
+        Keys keys = new Keys();
+        
+        try {
+    			
+    			FileInputStream fi = new FileInputStream(new File("Keys.txt"));
+    			ObjectInputStream oi = new ObjectInputStream(fi);
+    			
+    			keys = (Keys) oi.readObject();
+    			
+    			oi.close();
+    			fi.close();
+    			
+    		}
+    		
+    		catch(Exception e) {
+    			
+    			//System.out.println(e.getStackTrace());
+    			e.printStackTrace();
+    			
+    		}
+        
+        keys.clearKeysList();
+        
+        try {
+    			
+    			FileOutputStream f = new FileOutputStream(new File("Keys.txt"));
+    			ObjectOutputStream o = new ObjectOutputStream(f);
+    		
+    			o.writeObject(keys);
+    		
+    			o.close();
+    			f.close();
+    		
+    		}
+    	
+    		catch(Exception e) {
+    		
+    			//System.out.println(e.getStackTrace());
+    			e.printStackTrace();
+    		
+    		}
+        
+        jLabel7.setText("");
+        
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jLabel3FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jLabel3FocusGained
+        // TODO add your handling code here:
+        
+        
+        
+    }//GEN-LAST:event_jLabel3FocusGained
+
+    private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
+        // TODO add your handling code here:
+        
+        Input input = new Input();
+        
+        try {
+    			
+    			FileInputStream fi = new FileInputStream(new File("Inp.txt"));
+    			ObjectInputStream oi = new ObjectInputStream(fi);
+    			
+    			input = (Input) oi.readObject();
+    			
+    			oi.close();
+    			fi.close();
+    			
+    		}
+    		
+    		catch(Exception e) {
+    			
+    			//System.out.println(e.getStackTrace());
+    			e.printStackTrace();
+    			
+    		}
+        
+        Integer bfr = input.Bfr;
+        
+        String str = "<html>Hash Function:<br/>h = k mod(37)<br/><br/>Global Depth: 1<br/><br/>Bfr: " + String.valueOf(input.Bfr) + "</html>";
+        
+        jLabel3.setText(str);
+        
+    }//GEN-LAST:event_jLabel3MouseClicked
+
     public static boolean DEBUG = true;
     
     /**
@@ -282,91 +593,13 @@ public class Simulator extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Simulator().setVisible(true);
+                              
             }
         });
         
+        //InputForm inputForm = new InputForm();
         
-        Keys keys = new Keys();
-            
-            try {
-    			
-    			FileInputStream fi = new FileInputStream(new File("Keys.txt"));
-    			ObjectInputStream oi = new ObjectInputStream(fi);
-    			
-    			keys = (Keys) oi.readObject();
-    			
-    			oi.close();
-    			fi.close();
-    			
-    		}
-    		
-    		catch(Exception e) {
-    			
-    			//System.out.println(e.getStackTrace());
-    			e.printStackTrace();
-    			
-    		}
-            
-            Scanner in = new Scanner(System.in);
-            
-            String nextStep = in.nextLine();
-            
-            if(nextStep.equals("c")) {
-            	
-            	keys.clearKeysList();
-            	
-            }
-            
-            else {
-            	
-            	
-            	
-            }
-            
-            int input = in.nextInt();
-            
-            keys.keyList.add(input);
-            
-            Directory d = new Directory(3);
-            
-            System.out.println(input);
-            
-            in.close();
-            
-            for(Integer inp : keys.keyList) {
-            
-            	d.insert(inp);
-            
-            	IntegerHasher h = IntegerHasher.getInstance();
-            
-            	int hashValue = h.hash(inp);
-            	String hashInBinary = String.format("%32s", 
-					Integer.toBinaryString(hashValue));
-			
-            	System.out.println(String.format("Hashed %s to: %s", inp, hashInBinary));
-            
-            	d.print();
-            	
-            }
-            
-            try {
-    			
-    			FileOutputStream f = new FileOutputStream(new File("Keys.txt"));
-    			ObjectOutputStream o = new ObjectOutputStream(f);
-    		
-    			o.writeObject(keys);
-    		
-    			o.close();
-    			f.close();
-    		
-    		}
-    	
-    		catch(Exception e) {
-    		
-    			//System.out.println(e.getStackTrace());
-    			e.printStackTrace();
-    		
-    		}
+        
         
     }
 
@@ -386,6 +619,7 @@ public class Simulator extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

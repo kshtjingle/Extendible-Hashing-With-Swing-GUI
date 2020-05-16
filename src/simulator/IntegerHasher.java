@@ -27,7 +27,7 @@ public class IntegerHasher implements Hasher<Integer>{
 	//@Override
 	public int hash(Integer key) {
 
-		Integer hashk = key % 10;
+		Integer hashk = key % 37;
 		
 		System.out.println("HAsh = " + hashk);
 		

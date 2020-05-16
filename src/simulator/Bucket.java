@@ -5,11 +5,14 @@
  */
 package simulator;
 
+import java.io.*;
+import java.io.*;
+
 /**
  *
  * @author Kshitij
  */
-public class Bucket
+public class Bucket implements Serializable
 {
 	//          +-------------------------+
 	// bucket = |   HEADER   |   BUFFER   |
@@ -571,6 +574,31 @@ public class Bucket
 		bitStr = bitStr.replace(' ', '0');
 		
 		System.out.printf("|B: %d D: %d Bit: %s|", this.id, this.depth, bitStr);
+                
+                LabelString ls = new LabelString();
+                
+                String str = "";
+                
+                try {
+    			
+    			FileInputStream fi = new FileInputStream(new File("LabelString.txt"));
+    			ObjectInputStream oi = new ObjectInputStream(fi);
+    			
+    			ls = (LabelString) oi.readObject();
+    			
+    			oi.close();
+    			fi.close();
+    			
+    		}
+    		
+    		catch(Exception e) {
+    			
+    			//System.out.println(e.getStackTrace());
+    			e.printStackTrace();
+    			
+    		}
+                
+                str += "|B: " + this.id + " D: " + this.depth + " Bit: " + bitStr + "|";
 		
 		// Print bucket contents
 		/*String header = "", buffer = "";
@@ -596,6 +624,29 @@ public class Bucket
 		}
 		
 		System.out.println("Contents: " + bucketContents + " remaining size: " + this.remainingSize);
+                
+                str += "Contents: " + bucketContents + " remaining size: " + this.remainingSize;
+                
+                ls.str = str;
+                
+                try {
+    			
+    			FileOutputStream f = new FileOutputStream(new File("LabelString.txt"));
+    			ObjectOutputStream o = new ObjectOutputStream(f);
+    		
+    			o.writeObject(ls);
+    		
+    			o.close();
+    			f.close();
+    		
+    		}
+    	
+    		catch(Exception e) {
+    		
+    			//System.out.println(e.getStackTrace());
+    			e.printStackTrace();
+    		
+    		}
 		
 		// Print next bucket (if any)
 		if (this.nextBucket != null) {

@@ -12,7 +12,7 @@ import java.io.*;
  *
  * @author Kshitij
  */
-public class Directory
+public class Directory implements Serializable
 {
 	public static int MAX_DEPTH = 30;
 	
@@ -167,6 +167,28 @@ public class Directory
 	
 	public void print()
 	{
+            
+            LabelString ls = new LabelString();
+            
+            try {
+    			
+    			FileInputStream fi = new FileInputStream(new File("LabelString.txt"));
+    			ObjectInputStream oi = new ObjectInputStream(fi);
+    			
+    			ls = (LabelString) oi.readObject();
+    			
+    			oi.close();
+    			fi.close();
+    			
+    		}
+    		
+    		catch(Exception e) {
+    			
+    			//System.out.println(e.getStackTrace());
+    			e.printStackTrace();
+    			
+    		}
+            
 		System.out.println("Directory Depth: " + this.depth);
 		int len = (int) Math.pow(2, this.depth);
 		for (int i = 0; i < len; i++) {
@@ -176,5 +198,58 @@ public class Directory
 			System.out.println();
 		}
 		System.out.println();
+                
+                String LabelText = "<html>";
+            
+            LabelText += "Directory Depth: " + this.getDepth() + "<br/>" + "<br/>";
+            
+            len = (int) Math.pow(2, this.getDepth());
+		for (int j = 0; j < len; j++) {
+			String binaryI = String.format("%" + this.depth + "s", Integer.toBinaryString(j)).replace(' ', '0');
+			LabelText += binaryI;
+			this.directory[j].printBucket();
+                        try {
+    			
+    			FileInputStream fi = new FileInputStream(new File("LabelString.txt"));
+    			ObjectInputStream oi = new ObjectInputStream(fi);
+    			
+    			ls = (LabelString) oi.readObject();
+    			
+    			oi.close();
+    			fi.close();
+    			
+    		}
+    		
+    		catch(Exception e) {
+    			
+    			//System.out.println(e.getStackTrace());
+    			e.printStackTrace();
+    			
+    		}
+                        LabelText += ls.str + "<br/>" + "<br/>";
+			System.out.println();
+		}
+                
+                ls.str = LabelText + "</html>";
+                
+                try {
+    			
+    			FileOutputStream f = new FileOutputStream(new File("LabelString.txt"));
+    			ObjectOutputStream o = new ObjectOutputStream(f);
+    		
+    			o.writeObject(ls);
+    		
+    			o.close();
+    			f.close();
+    		
+    		}
+    	
+    		catch(Exception e) {
+    		
+    			//System.out.println(e.getStackTrace());
+    			e.printStackTrace();
+    		
+    		}
+                
 	}
 }
