@@ -46,27 +46,126 @@ public class Directory implements Serializable
 	 * 
 	 * @param value Value to insert.
 	 */
-	public void insert(Integer value)
+	public void insert(Integer value, Integer flag)
 	{
 		int pseudokey = this.h.hash(value);
+                
+                Label2 label2 = new Label2();
 		
 		System.out.println("PseudoKey = " + pseudokey);
 		
 		int key = BitUtility.getRightMostBits(pseudokey, this.depth);
 		
 		System.out.println("depth = " + depth + "key(not pseudo) = " + key);
+                
+               if(flag == 1){ try {
+    			
+    			FileInputStream fi = new FileInputStream(new File("Label2.txt"));
+    			ObjectInputStream oi = new ObjectInputStream(fi);
+    			
+    			label2 = (Label2) oi.readObject();
+    			
+    			oi.close();
+    			fi.close();
+    			
+    		}
+    		
+    		catch(Exception e) {
+    			
+    			//System.out.println(e.getStackTrace());
+    			e.printStackTrace();
+    			
+    		}
+                
+                System.out.println("label2.str = " + label2.str);
+                
+                label2.str += this.depth + " right-most bits of hashed value: " + String.format("%" + this.depth + "s", Integer.toBinaryString(key)).replace(' ', '0') + "<br/><br/>";
 		
+               }
+                
 		Bucket b = this.directory[key];
 		
-		if (Simulator.DEBUG)
+		if (Simulator.DEBUG){
 			System.out.println("Inserting " + value + " to directory["+key+"] (Bucket: "+b.id+")");
-		
+                        
+                       if(flag == 1){ label2.str += "Inserting " + value + " to directory[" + key + "] (Bucket: " + b.id + ")" + "<br/><br/>";}
+                        
+                }
+       		
 		boolean inserted = b.insert(value);
+                
+                if(flag == 1){try {
+    			
+    			FileOutputStream f = new FileOutputStream(new File("Label2.txt"));
+    			ObjectOutputStream o = new ObjectOutputStream(f);
+    		
+    			o.writeObject(label2);
+    		
+    			o.close();
+    			f.close();
+    		
+    		}
+    	
+    		catch(Exception e) {
+    		
+    			//System.out.println(e.getStackTrace());
+    			e.printStackTrace();
+    		
+    		}}
 		
 		while (! inserted) {			
 			if (this.depth > b.getDepth()) {
-				if (Simulator.DEBUG)
+                            
+                            if(flag == 1){
+                                
+                                label2 = new Label2();
+                                
+                                try {
+    			
+    			FileInputStream fi = new FileInputStream(new File("Label2.txt"));
+    			ObjectInputStream oi = new ObjectInputStream(fi);
+    			
+    			label2 = (Label2) oi.readObject();
+    			
+    			oi.close();
+    			fi.close();
+    			
+    		}
+    		
+    		catch(Exception e) {
+    			
+    			//System.out.println(e.getStackTrace());
+    			e.printStackTrace();
+    			
+    		}
+                                
+                            }
+                            
+				if (Simulator.DEBUG){
 					System.out.println("Bucket " + b.id + " is full!");
+                                        
+                                        if(flag == 1){label2.str += "Bucket " + b.id + " is full!" + "<br/><br/>";}
+                                        
+                                }      
+                                
+                                if(flag == 1){try {
+    			
+    			FileOutputStream f = new FileOutputStream(new File("Label2.txt"));
+    			ObjectOutputStream o = new ObjectOutputStream(f);
+    		
+    			o.writeObject(label2);
+    		
+    			o.close();
+    			f.close();
+    		
+    		}
+    	
+    		catch(Exception e) {
+    		
+    			//System.out.println(e.getStackTrace());
+    			e.printStackTrace();
+    		
+    		}}
 				
 				Bucket b2 = new Bucket(b);
 				b2.incDepth1();
@@ -86,7 +185,9 @@ public class Directory implements Serializable
 				}
 			}
 			else if (this.depth == b.getDepth()) {
-				expand(key);
+				expand(key, flag);
+                                
+                                
 			}
 			else {
 				ErrorLogger.logIssue("Directory.insertAt(String)", "Global depth < Local Depth");
@@ -118,7 +219,7 @@ public class Directory implements Serializable
 	 * 
 	 * @param fullBucketIndex The index of the directory entry referencing a full bucket.
 	 */
-	private void expand(int fullBucketIndex)
+	private void expand(int fullBucketIndex, int flag)
 	{		
 		if (this.depth == Directory.MAX_DEPTH) {
 			if (Simulator.DEBUG)
@@ -134,9 +235,34 @@ public class Directory implements Serializable
 			System.exit(-1);
 			*/
 		}
+                
+                Label2 label2 = new Label2();
+                
+                if(flag == 1){try {
+    			
+    			FileInputStream fi = new FileInputStream(new File("Label2.txt"));
+    			ObjectInputStream oi = new ObjectInputStream(fi);
+    			
+    			label2 = (Label2) oi.readObject();
+    			
+    			oi.close();
+    			fi.close();
+    			
+    		}
+    		
+    		catch(Exception e) {
+    			
+    			//System.out.println(e.getStackTrace());
+    			e.printStackTrace();
+    			
+    		}}
 		
-		if (Simulator.DEBUG)
+		if (Simulator.DEBUG){
 			System.out.println("Expanding Directory: ");
+                        
+                        if(flag == 1){label2.str += "Expanding Directory: " + "<br/><br/>";}
+                        
+                }
 		
 		Bucket[] newDirectory = new Bucket[this.directory.length * 2];
 		
@@ -160,9 +286,30 @@ public class Directory implements Serializable
 		this.depth++;
 		
 		System.out.println("newDepth = "+ this.depth);
+                
+                if(flag == 1){label2.str += "newDepth = " + this.depth + "<br/><br/>";}
 		
 		if (Simulator.DEBUG)
 			print();
+                
+                if(flag == 1){try {
+    			
+    			FileOutputStream f = new FileOutputStream(new File("Label2.txt"));
+    			ObjectOutputStream o = new ObjectOutputStream(f);
+    		
+    			o.writeObject(label2);
+    		
+    			o.close();
+    			f.close();
+    		
+    		}
+    	
+    		catch(Exception e) {
+    		
+    			//System.out.println(e.getStackTrace());
+    			e.printStackTrace();
+    		
+    		}}
 	}
 	
 	public void print()

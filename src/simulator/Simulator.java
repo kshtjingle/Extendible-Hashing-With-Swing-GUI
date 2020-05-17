@@ -54,6 +54,7 @@ public class Simulator extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jLabel6 = new javax.swing.JLabel();
+        jButton4 = new javax.swing.JButton();
 
         javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
         jDialog1.getContentPane().setLayout(jDialog1Layout);
@@ -186,13 +187,26 @@ public class Simulator extends javax.swing.JFrame {
             .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE)
         );
 
+        jButton4.setText("Back");
+        jButton4.setActionCommand("");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(51, 51, 51)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(51, 51, 51)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(98, 98, 98)
+                        .addComponent(jButton4)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(107, 107, 107)
@@ -234,17 +248,18 @@ public class Simulator extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton4)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton3))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton3))
                         .addGap(41, 41, 41)
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(43, 43, 43)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 396, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(136, 136, 136)
+                        .addGap(76, 76, 76)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -372,7 +387,112 @@ public class Simulator extends javax.swing.JFrame {
             
             for(Integer inp : keys.keyList) {
             
-            	d.insert(inp);
+            	if(inp == input){
+                    
+                    System.out.println("LALALALALA");
+            
+            	IntegerHasher h = IntegerHasher.getInstance();
+            
+            	int hashValue = h.hash(inp);
+            	String hashInBinary = String.format("%32s", 
+					Integer.toBinaryString(hashValue));
+			
+            	System.out.println(String.format("Hashed %s to: %s", inp, hashInBinary));
+                
+                Label2 label2 = new Label2();
+                
+                try {
+    			
+    			FileInputStream fi = new FileInputStream(new File("Label2.txt"));
+    			ObjectInputStream oi = new ObjectInputStream(fi);
+    			
+    			label2 = (Label2) oi.readObject();
+    			
+    			oi.close();
+    			fi.close();
+    			
+    		}
+    		
+    		catch(Exception e) {
+    			
+    			//System.out.println(e.getStackTrace());
+    			e.printStackTrace();
+    			
+    		}
+                
+                label2.str += "<html>" + String.valueOf(inp) + " hashed to: " + String.valueOf(hashValue) + "<br/><br/>" + "BitPattern: " + hashInBinary + "<br/><br/>";
+                
+                try {
+    			
+    			FileOutputStream f = new FileOutputStream(new File("Label2.txt"));
+    			ObjectOutputStream o = new ObjectOutputStream(f);
+    		
+    			o.writeObject(label2);
+    		
+    			o.close();
+    			f.close();
+    		
+    		}
+    	
+    		catch(Exception e) {
+    		
+    			//System.out.println(e.getStackTrace());
+    			e.printStackTrace();
+    		
+    		}
+                
+                d.insert(inp, 1);
+                
+                System.out.println("label2.str in Simulator = " + label2.str);
+                
+                try {
+    			
+    			FileInputStream fi = new FileInputStream(new File("Label2.txt"));
+    			ObjectInputStream oi = new ObjectInputStream(fi);
+    			
+    			label2 = (Label2) oi.readObject();
+    			
+    			oi.close();
+    			fi.close();
+    			
+    		}
+    		
+    		catch(Exception e) {
+    			
+    			//System.out.println(e.getStackTrace());
+    			e.printStackTrace();
+    			
+    		}
+                
+                System.out.println("label2.str in Simulator = " + label2.str);
+                
+                
+                 try {
+    			
+    			FileOutputStream f = new FileOutputStream(new File("Label2.txt"));
+    			ObjectOutputStream o = new ObjectOutputStream(f);
+    		
+    			o.writeObject(label2);
+    		
+    			o.close();
+    			f.close();
+    		
+    		}
+    	
+    		catch(Exception e) {
+    		
+    			//System.out.println(e.getStackTrace());
+    			e.printStackTrace();
+    		
+    		}
+                
+            	d.print();
+                    
+                }
+                
+                else{
+                    
+                    d.insert(inp, 0);
             
             	IntegerHasher h = IntegerHasher.getInstance();
             
@@ -383,8 +503,8 @@ public class Simulator extends javax.swing.JFrame {
             	System.out.println(String.format("Hashed %s to: %s", inp, hashInBinary));
             
             	d.print();
-                
-                
+                    
+                }
             	
             }
             
@@ -469,6 +589,54 @@ public class Simulator extends javax.swing.JFrame {
     			e.printStackTrace();
     		
     		}
+            
+            Label2 label2 = new Label2();
+            
+            try {
+    			
+    			FileInputStream fi = new FileInputStream(new File("Label2.txt"));
+    			ObjectInputStream oi = new ObjectInputStream(fi);
+    			
+    			label2 = (Label2) oi.readObject();
+    			
+    			oi.close();
+    			fi.close();
+    			
+    		}
+    		
+    		catch(Exception e) {
+    			
+    			//System.out.println(e.getStackTrace());
+    			e.printStackTrace();
+    			
+    		}
+            
+            label2.str += "</html>";
+            
+            jLabel6.setText(label2.str);
+            
+            label2.str = "";
+            
+            try {
+    			
+    			FileOutputStream f = new FileOutputStream(new File("Label2.txt"));
+    			ObjectOutputStream o = new ObjectOutputStream(f);
+    		
+    			o.writeObject(label2);
+    		
+    			o.close();
+    			f.close();
+    		
+    		}
+    	
+    		catch(Exception e) {
+    		
+    			//System.out.println(e.getStackTrace());
+    			e.printStackTrace();
+    		
+    		}
+            
+            jTextField1.setText("");
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -519,6 +687,10 @@ public class Simulator extends javax.swing.JFrame {
         
         jLabel7.setText("");
         
+        jLabel6.setText("");
+        
+        
+        
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jLabel3FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jLabel3FocusGained
@@ -559,6 +731,14 @@ public class Simulator extends javax.swing.JFrame {
         jLabel3.setText(str);
         
     }//GEN-LAST:event_jLabel3MouseClicked
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        
+        new Starter().setVisible(true);
+         this.setVisible(false);
+        
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     public static boolean DEBUG = true;
     
@@ -611,6 +791,7 @@ public class Simulator extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;

@@ -573,7 +573,7 @@ public class Bucket implements Serializable
 			bitStr = String.format("%"+this.depth+"s", Integer.toBinaryString(this.bitPattern));
 		bitStr = bitStr.replace(' ', '0');
 		
-		System.out.printf("|B: %d D: %d Bit: %s|", this.id, this.depth, bitStr);
+		System.out.printf(/*"|B: %d D: %d Bit: %s|", this.id, this.depth, bitStr*/" |LD: " + this.depth + " Bit: " + bitStr + "| ");
                 
                 LabelString ls = new LabelString();
                 
@@ -598,7 +598,7 @@ public class Bucket implements Serializable
     			
     		}
                 
-                str += "|B: " + this.id + " D: " + this.depth + " Bit: " + bitStr + "|";
+                str += /*"|B: " + this.id + */" |LD: " + this.depth + " Bit: " + bitStr + "| ";
 		
 		// Print bucket contents
 		/*String header = "", buffer = "";
