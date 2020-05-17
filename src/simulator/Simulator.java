@@ -20,6 +20,8 @@ public class Simulator extends javax.swing.JFrame {
     public Simulator() {
         initComponents();
     }
+    
+    public static Directory d;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -289,8 +291,79 @@ public class Simulator extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
 
+    Integer inputt;
+    
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+        
+        Input i = new Input();
+        
+        try {
+    			
+    			FileInputStream fi = new FileInputStream(new File("Inp.txt"));
+    			ObjectInputStream oi = new ObjectInputStream(fi);
+    			
+    			i = (Input) oi.readObject();
+    			
+    			oi.close();
+    			fi.close();
+    			
+    		}
+    		
+    		catch(Exception e) {
+    			
+    			//System.out.println(e.getStackTrace());
+    			e.printStackTrace();
+    			
+    		}
+        
+        d = new Directory(i.Bfr);
+        
+        Keys keys = new Keys();
+            
+            try {
+    			
+    			FileInputStream fi = new FileInputStream(new File("Keys.txt"));
+    			ObjectInputStream oi = new ObjectInputStream(fi);
+    			
+    			keys = (Keys) oi.readObject();
+    			
+    			oi.close();
+    			fi.close();
+    			
+    		}
+    		
+    		catch(Exception e) {
+    			
+    			//System.out.println(e.getStackTrace());
+    			e.printStackTrace();
+    			
+    		}
+            
+            for(Integer inp : keys.keyList) {
+                
+                d.insert(inp, 0);
+                
+            }
+        
+        int inputtt = Integer.valueOf(jTextField1.getText());
+        
+        System.out.println("INPUTTT" + inputtt);
+        
+        int result = d.countProbes(inputtt);
+        
+        if(result == 1){
+            
+            jLabel5.setText("Found!");
+            
+        }
+        
+        else{
+            
+            jLabel5.setText("Not Found:(");
+            
+        }
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -360,7 +433,7 @@ public class Simulator extends javax.swing.JFrame {
             
             keys.keyList.add(input);
             
-            Directory d = new Directory(i.Bfr);
+            d = new Directory(i.Bfr);
             
            /* try {
     			
@@ -637,6 +710,8 @@ public class Simulator extends javax.swing.JFrame {
     		}
             
             jTextField1.setText("");
+            
+            
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -773,7 +848,30 @@ public class Simulator extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Simulator().setVisible(true);
-                              
+                           
+                Input i = new Input();
+        
+        try {
+    			
+    			FileInputStream fi = new FileInputStream(new File("Inp.txt"));
+    			ObjectInputStream oi = new ObjectInputStream(fi);
+    			
+    			i = (Input) oi.readObject();
+    			
+    			oi.close();
+    			fi.close();
+    			
+    		}
+    		
+    		catch(Exception e) {
+    			
+    			//System.out.println(e.getStackTrace());
+    			e.printStackTrace();
+    			
+    		}
+        
+        d = new Directory(i.Bfr);
+                
             }
         });
         

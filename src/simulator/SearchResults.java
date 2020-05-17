@@ -11,4 +11,6 @@ package simulator;
  */
 public class SearchResults {
     
+    
+    
 }

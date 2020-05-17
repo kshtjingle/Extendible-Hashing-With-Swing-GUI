@@ -29,7 +29,7 @@ public class IntegerHasher implements Hasher<Integer>{
 
 		Integer hashk = key % 37;
 		
-		System.out.println("HAsh = " + hashk);
+		System.out.println("Hash = " + hashk);
 		
 		return hashk;
 		

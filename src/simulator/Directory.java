@@ -208,10 +208,23 @@ public class Directory implements Serializable
 	 */
 	public int countProbes(Integer value)
 	{
-		int pseudokey = this.h.hash(value);
+            
+            System.out.println("VALUE: " + value);
+		/*int pseudokey = this.h.hash(value);
 		int key = BitUtility.getRightMostBits(pseudokey, this.depth);
-		Bucket b = this.directory[key];
-		return b.countProbes(value);
+		Bucket b = this.directory[key];*/
+                for(int i = 0; i < BitUtility.pow(2, this.depth); i++){
+                    
+                    Bucket b = this.directory[i];
+                    
+                    if(b.search(value) == 1){
+                        
+                        return 1;
+                        
+                    }
+                    
+                }
+		return 0;
 	}
 	
 	/**
