@@ -209,6 +209,8 @@ public class Directory implements Serializable
 	public int countProbes(Integer value)
 	{
             
+            SearchResults searchResults = new SearchResults();
+            
             System.out.println("VALUE: " + value);
 		/*int pseudokey = this.h.hash(value);
 		int key = BitUtility.getRightMostBits(pseudokey, this.depth);
@@ -219,11 +221,54 @@ public class Directory implements Serializable
                     
                     if(b.search(value) == 1){
                         
+                        searchResults.str += "<html>FOUND!<br/><br/> Found in bucket pointed at<br/>by directory:<br/>" + String.format("%" + this.getDepth() + "s", Integer.toBinaryString(i)).replace(' ', '0');
+                        
+                        try {
+    			
+    			FileOutputStream f = new FileOutputStream(new File("SearchResults.txt"));
+    			ObjectOutputStream o = new ObjectOutputStream(f);
+    		
+    			o.writeObject(searchResults);
+    		
+    			o.close();
+    			f.close();
+    		
+    		}
+    	
+    		catch(Exception e) {
+    		
+    			//System.out.println(e.getStackTrace());
+    			e.printStackTrace();
+    		
+    		}
+                        
                         return 1;
                         
                     }
                     
                 }
+                
+                searchResults.str = "NOT FOUND :(";
+                
+                try {
+    			
+    			FileOutputStream f = new FileOutputStream(new File("SearchResults.txt"));
+    			ObjectOutputStream o = new ObjectOutputStream(f);
+    		
+    			o.writeObject(searchResults);
+    		
+    			o.close();
+    			f.close();
+    		
+    		}
+    	
+    		catch(Exception e) {
+    		
+    			//System.out.println(e.getStackTrace());
+    			e.printStackTrace();
+    		
+    		}
+                
 		return 0;
 	}
 	
@@ -361,7 +406,7 @@ public class Directory implements Serializable
                 
                 String LabelText = "<html>";
             
-            LabelText += "Directory Depth: " + this.getDepth() + "<br/>" + "<br/>";
+            LabelText += "Directory Depth (Global Depth): " + this.getDepth() + "<br/>" + "<br/>";
             
             len = (int) Math.pow(2, this.getDepth());
 		for (int j = 0; j < len; j++) {

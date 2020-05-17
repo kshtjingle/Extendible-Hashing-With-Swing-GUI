@@ -342,11 +342,16 @@ public class Bucket implements Serializable
 			offset += this.bucket[curr];
 			curr++;
 		}*/
+            
+            
+            
+            
 		
 		for(int i = 0; i < this.getCapacity(); i++) {
 			
 			if(this.bucket[i] == key){
 				
+                                
 				return 1;
 				
 			}

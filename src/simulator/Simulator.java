@@ -161,6 +161,7 @@ public class Simulator extends javax.swing.JFrame {
 
         jPanel5.setBorder(new javax.swing.border.MatteBorder(null));
 
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jScrollPane1.setViewportView(jLabel5);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
@@ -350,9 +351,11 @@ public class Simulator extends javax.swing.JFrame {
         
         System.out.println("INPUTTT" + inputtt);
         
+        SearchResults searchResults = new SearchResults();
+        
         int result = d.countProbes(inputtt);
         
-        if(result == 1){
+        /*if(result == 1){
             
             jLabel5.setText("Found!");
             
@@ -362,7 +365,49 @@ public class Simulator extends javax.swing.JFrame {
             
             jLabel5.setText("Not Found:(");
             
-        }
+        }*/
+        
+        try {
+    			
+    			FileInputStream fi = new FileInputStream(new File("SearchResults.txt"));
+    			ObjectInputStream oi = new ObjectInputStream(fi);
+    			
+    			searchResults = (SearchResults) oi.readObject();
+    			
+    			oi.close();
+    			fi.close();
+    			
+    		}
+    		
+    		catch(Exception e) {
+    			
+    			//System.out.println(e.getStackTrace());
+    			e.printStackTrace();
+    			
+    		}
+        
+        jLabel5.setText(searchResults.str);
+        
+        searchResults.str = "";
+        
+        try {
+    			
+    			FileOutputStream f = new FileOutputStream(new File("SearchResults.txt"));
+    			ObjectOutputStream o = new ObjectOutputStream(f);
+    		
+    			o.writeObject(searchResults);
+    		
+    			o.close();
+    			f.close();
+    		
+    		}
+    	
+    		catch(Exception e) {
+    		
+    			//System.out.println(e.getStackTrace());
+    			e.printStackTrace();
+    		
+    		}
         
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -389,7 +434,9 @@ public class Simulator extends javax.swing.JFrame {
     			e.printStackTrace();
     			
     		}
-                
+        
+        d = new Directory(i.Bfr);
+        
         Keys keys = new Keys();
             
             try {
@@ -411,6 +458,71 @@ public class Simulator extends javax.swing.JFrame {
     			
     		}
             
+            for(Integer inp : keys.keyList) {
+                
+                d.insert(inp, 0);
+                
+            }
+            
+            int input = Integer.parseInt(jTextField1.getText());
+            
+            int result = d.countProbes(input);
+            
+            if(result == 1){
+                
+                new Caution().setVisible(true);
+         //this.setVisible(false);
+                
+            }
+            
+            else{
+                
+                keys.keyList.add(input);
+                
+            }
+        
+       /* i = new Input();
+        
+        try {
+    			
+    			FileInputStream fi = new FileInputStream(new File("Inp.txt"));
+    			ObjectInputStream oi = new ObjectInputStream(fi);
+    			
+    			i = (Input) oi.readObject();
+    			
+    			oi.close();
+    			fi.close();
+    			
+    		}
+    		
+    		catch(Exception e) {
+    			
+    			//System.out.println(e.getStackTrace());
+    			e.printStackTrace();
+    			
+    		}
+                
+        keys = new Keys();
+            
+            try {
+    			
+    			FileInputStream fi = new FileInputStream(new File("Keys.txt"));
+    			ObjectInputStream oi = new ObjectInputStream(fi);
+    			
+    			keys = (Keys) oi.readObject();
+    			
+    			oi.close();
+    			fi.close();
+    			
+    		}
+    		
+    		catch(Exception e) {
+    			
+    			//System.out.println(e.getStackTrace());
+    			e.printStackTrace();
+    			
+    		}*/
+            
             /*Scanner in = new Scanner(System.in);
             
             String nextStep = in.nextLine();
@@ -429,9 +541,9 @@ public class Simulator extends javax.swing.JFrame {
             
             int input = in.nextInt();*/
             
-            int input = Integer.parseInt(jTextField1.getText());
             
-            keys.keyList.add(input);
+            
+            
             
             d = new Directory(i.Bfr);
             
@@ -801,7 +913,7 @@ public class Simulator extends javax.swing.JFrame {
         
         Integer bfr = input.Bfr;
         
-        String str = "<html>Hash Function:<br/>h = k mod(37)<br/><br/>Global Depth: 1<br/><br/>Bfr: " + String.valueOf(input.Bfr) + "</html>";
+        String str = "<html>Hash Function:<br/>h = k mod(37)<br/><br/>Initial Global Depth: 1<br/><br/>Bfr: " + String.valueOf(input.Bfr) + "</html>";
         
         jLabel3.setText(str);
         
@@ -874,6 +986,8 @@ public class Simulator extends javax.swing.JFrame {
                 
             }
         });
+        
+        
         
         //InputForm inputForm = new InputForm();
         

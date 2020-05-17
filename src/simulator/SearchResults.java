@@ -5,12 +5,14 @@
  */
 package simulator;
 
+import java.io.*;
+
 /**
  *
  * @author Kshitij
  */
-public class SearchResults {
+public class SearchResults implements Serializable{
     
-    
+    String str = "";
     
 }
